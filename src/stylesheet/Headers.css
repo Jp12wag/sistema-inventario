@@ -1,0 +1,35 @@
+.header-container {
+    width: 100px;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Esto distribuirá los elementos a lo largo del contenedor */
+    align-items: center; /* Esto centrará verticalmente los elementos */
+    color: white;
+    cursor: pointer;
+   
+}
+
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+    
+}
+
+nav ul li {
+    display: inline;
+    margin-left: 20px; /* Puedes ajustar el margen según sea necesario */
+}
+
+ul:hover{
+background-color: black;
+}
+.habilitado{
+display: block;
+}
+.Inhabilitado{
+display: none;
+}
