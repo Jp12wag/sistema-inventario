@@ -2,15 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/src/index.css">
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="/src/index.css" >
+    <link rel="icon" href="%PUBLIC_URL%/favicon-light.ico" media="(prefers-color-scheme: dark)"/>
+    <link rel="icon" href="%PUBLIC_URL%/favicon-dark.ico" media="(prefers-color-scheme: light)"/>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Sistema de inventario LogiVault"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192-light.png" media="(prefers-color-scheme:dark)" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192-dark.png" media="(prefers-color-scheme:light)" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -25,61 +28,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>LogiVault</title>
   </head>
   <body>
     <!-- <noscript>You need to enable JavaScript to run this app.</noscript> -->
     
-    <div id="Contenido">
 
-      <header id="cabezazo">
-        <h1>Inventario</h1>
-      </header>
-
-      <nav id="Menu">
-        <ul>
-          <li><input type="text" name="Buscar" id="BuscarInput" placeholder="Buscar un articulo"/></li>
-          <li><button id="TipoTodos" type="button" onclick="ResetPagina()" >Todos</button></li>
-          <li><button id="TipoTodos" type="button" onclick="DameArticuloesDeTipoEspecifico(1)" >Categoria de Ejemplo</button></li>
-        </ul>
-     </nav>
-
-    </div ClassClearFix>
-
-      <article id=" Acticulo">
-        <ul id = ListaDeArticuloes>
-<!-- En este lugar estaran los Articuloes -->
-
-        </ul>
-      </article>
-     
-      <aside>
-        <ul>
-          <img id = "ImagenDeArticuloSeleccionado" src="https://unajarradebarro.files.wordpress.com/2012/03/interrogante-duda-pregunta2.jpg?w=640" 
-          alt="Busca un Articulo"
-          width="100""
-          height="100""
-          >
-          
-          <li id="Nombre">Nombre: ???</li>
-          <li id="descripción">descripción: ???</li>
-          <li id="Existencias">Existencias: ???</li>
-          <li id="Categorias">Categorias: ???</li>
-          <li id="Ubicación ">Ubicación : ???</li>
-          <li id="Peso">Peso: ???</li>
-          <li id="Proveedor">Proveedor: ???</li>
-          
-        </ul>
-      </aside>
-
-      <button id="CargarMasBoton" type="button" onclick="DameMasArticuloes(12)">CARGAR MAS</button>
-
-      <footer>
-        <p>Sistema de inventário da web 2024</p>
-      </footer>
-    </div>
-
-    <script src="/src/App.js" ></script>
     <div id="root"></div>
     <!--
       This HTML file is a template.

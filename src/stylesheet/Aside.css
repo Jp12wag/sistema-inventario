@@ -1,0 +1,26 @@
+aside {
+    max-width: 20%;
+    min-height: 490px;
+    width: 19%;
+    height: 535px;
+    float: left;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #487be99e;
+}
+
+aside ul li {
+    list-style: none;
+    width: 100%;
+    flex-direction:column;
+    font-size:medium;
+}
+
+aside ul li button {
+font-size: small;
+    text-align: center;
+    width: 80%;
+    height: 30px;
+    border-style: none;
+    border-radius: 0px;
+}

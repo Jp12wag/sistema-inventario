@@ -1,42 +1,52 @@
-*{
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
 
-body,
+
+
 html{
     width: 100vw;
-    height: 100vh;
-    background-color: #1b1b32;
-}
+    height: 100%vh;
+   }
+
+   body{
+    width: 100vw;
+    height: auto;
+    background: rgb(250,250,250) ;
+    background: var(--clr-gradient) no-repeat fixed  ;
+    background-size:110%;   }
 
 .App{
-    padding-top: 10px;
-    background-color: #1b1b32;
+
+    padding: 130px 0;
     font-family: Lato, sans-serif;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+
 
 }
 .contenedor-principal{
-    width: 400px;
-    height: auto;
+    width: 1350px ;
+    height: 700px;
     display: flex;
     flex-direction: column;
-    margin: 50px;
-    padding: 14px;
-    background-color: #1b1b32;
+    background-color: #f4ce9c;
     border-radius: 20px;
     border: 5px solid white;
-    justify-content: center;
     align-items: center;
+    overflow: hidden;
+   
 }
 
+
 .contenedor-logo{
-    width: 400px;
-    height: auto;
+    width: auto;
+   
+}
+
+
+
+
+:root {
+    --clr-gradient:linear-gradient(45deg, rgba(250,250,250,1) 0%, rgba(250,176,41,1) 95%, rgba(240,108,0,1) 98%);
 }

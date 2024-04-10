@@ -1,0 +1,30 @@
+.contenedorProductos{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex: wrap;
+    border: 2px solidd white;
+
+}
+
+.registroProductos{
+    width: 100%;
+    height: auto;
+    border: 2px solid white;
+}
+.productoUnitario{
+    width: 100%;
+    height: 50px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border: 2px solid white;
+}
+h2{
+    border: 2px solid white ;
+}
+p{
+    border: 2px solid white ;   
+}
