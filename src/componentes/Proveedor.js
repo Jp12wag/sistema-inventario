@@ -226,12 +226,12 @@ const VerProveedor = () => {
                                 <form onSubmit={handleSubmit}>
                                     <div className='modal-body'>
                                         <div className='mb-3'>
-                                            <label htmlFor='name' className='form-label'>Nombre de la Proveedor</label>
+                                            <label htmlFor='name' className='form-label'>Nombre de la compañia</label>
                                             <input type='text' className='form-control' id='name' onChange={(e) => setName(e.target.value)} value={name} required />
                                         </div>
                                         {/* Agrega los demás campos del formulario aquí */}
                                         <div className="mb-3">
-                                            <label htmlFor="contacto" className="form-label">Contacto</label>
+                                            <label htmlFor="contacto" className="form-label">Nombre del proveedor</label>
                                             <input className="form-control" id="contacto" onChange={(e) => setContacto(e.target.value)} value={contacto} placeholder="Contacto del Proveedor" required />
                                         </div>
                                         <div className="mb-3">

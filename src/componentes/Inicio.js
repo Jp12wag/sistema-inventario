@@ -71,7 +71,7 @@ function VentanaIniciSesion() {
 
       <div className='contenedor-inicio'>
 
-        <div className='imagen-inicio'><img src={imgInicio} alt='imgagen de inicio' /></div>
+        <div className='imagen-inicio'><img src={imgInicio} alt='imagen de inicio' /></div>
         <div className='log-info'>
           <img className='img-logo' src={logo} alt='logo app' />
           <label htmlFor='email'>Email

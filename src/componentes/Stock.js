@@ -15,9 +15,24 @@ const StockManagement = () => {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [operacion, setOperacion] = useState(2);
+    const [Ubicaciones, setUbicaciones] = useState([]);
+    const [cantidad, setCantidad] = useState();
+    const [cliente, setCliente] = useState();
+    const [ubic, setUbica] = useState();
+    const [salidas, setSalidas] = useState({
+        producto: '',
+        cantidad: '',
+        ubicacion: '',
+        cliente: '',
+        precioDeVenta: '',
+        fecha: ''
+    });
+
+
     useEffect(() => {
         // Cargar productos al montar el componente
         cargarProductos();
+        cargarUbicaciones();
     }, []);
 
 
@@ -52,10 +67,41 @@ const StockManagement = () => {
         }
     }
 
-    const openModal = (op, id, name, stockInicial) => {
+    const cargarUbicaciones = async () => {
+        try {
+            const UbicacionesData = await obtenerUbicaciones();
+            setUbicaciones(UbicacionesData);
+        } catch (error) {
+            console.error('Error al cargar los productos:', error);
+        }
+    };
+    async function obtenerUbicaciones() {
+        try {
+            const response = await fetch('http://localhost:3001/Ubicaciones', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error de la red');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+
+    const openModal = (op, id, name, stockInicial, ubicacion) => {
         setId('');
         setName('');
         setStockInicial('');
+        setUbicaciones('');
 
         setOperacion(op);
         if (op === 2) {
@@ -63,6 +109,7 @@ const StockManagement = () => {
             setId(id);
             setName(name);
             setStockInicial(stockInicial);
+            setUbicaciones(ubicacion);
         }
 
         window.setTimeout(function () {
@@ -87,7 +134,7 @@ const StockManagement = () => {
                 },
                 body: JSON.stringify(Parametros)
             })
-            
+
             if (!response.ok) {
                 throw new Error('Error de la red');
             }
@@ -96,8 +143,8 @@ const StockManagement = () => {
             cargarProductos();
 
         } catch (error) {
-        console.log("Error", error);
-       
+            console.log("Error", error);
+
         }
 
 
@@ -110,9 +157,9 @@ const StockManagement = () => {
             // Obtener la fecha actual
             const fechaEntrada = new Date();
             const producto = productos.find(producto => producto._id === productoId);
-            const StockAcumulado = parseInt(producto.stockInicial) +parseInt(stockInicial);
-            const parametros = { fecha: fechaEntrada, cantidad: StockAcumulado ,producto: productoId };
-            const parametrosDados = { fecha: fechaEntrada, cantidad: stockInicial, producto: productoId };
+            const StockAcumulado = parseInt(producto.stockInicial) + parseInt(stockInicial);
+            const parametros = { fecha: fechaEntrada, cantidad: StockAcumulado, producto: productoId, ubicacion: ubic };
+            const parametrosDados = { fecha: fechaEntrada, cantidad: stockInicial, producto: productoId, ubicacion: ubic };
             if (!producto.fechaE) {
                 // Realizar el PUT solo si la fecha de entrada está vacía
 
@@ -123,7 +170,7 @@ const StockManagement = () => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({fechaE:SoloFecha})
+                    body: JSON.stringify({ fechaE: SoloFecha })
                 });
 
                 if (!response.ok) {
@@ -134,7 +181,7 @@ const StockManagement = () => {
                 verAlerta('Fecha de entrada actualizada correctamente', 'success');
                 cargarProductos();
                 RegistroEntrada(parametrosDados);
-               
+
             } else {
                 // La fecha de entrada ya está registrada, no se realiza ninguna acción
                 console.log('La fecha de entrada ya está registrada para este producto');
@@ -146,7 +193,7 @@ const StockManagement = () => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({stockInicial:stockInicial})
+                    body: JSON.stringify({ stockInicial: stockInicial })
                 });
 
                 if (!response.ok) {
@@ -165,6 +212,7 @@ const StockManagement = () => {
 
     };
 
+
     // Función para manejar la salida de productos
     const registrarSalida = async (productoId) => {
         try {
@@ -172,8 +220,16 @@ const StockManagement = () => {
             const fechaSalida = new Date();
             const parametros = { fechaS: fechaSalida }
             const producto = productos.find(producto => producto._id === productoId);
+            setSalidas({
+                producto: productoId,
+                cantidad: cantidad,
+                ubicación: Ubicaciones._id,
+                cliente: cliente,
+                precioDeVenta: producto.precio,
+                fecha: fechaSalida
+            });
 
-
+            console.log(salidas);
             if (!producto.fechaS) {
                 // Realizar el PUT solo si la fecha de entrada está vacía
                 const response = await fetch(`http://localhost:3001/productos/${productoId}`, {
@@ -192,6 +248,7 @@ const StockManagement = () => {
                 // Si la solicitud es exitosa, puedes mostrar una alerta o actualizar la lista de productos
                 verAlerta('Fecha de entrada actualizada correctamente', 'success');
                 document.getElementById('btnCerrar').click();
+                // validarSalida(salidas);
                 cargarProductos();
             } else {
                 // La fecha de entrada ya está registrada, no se realiza ninguna acción
@@ -203,6 +260,53 @@ const StockManagement = () => {
             // verAlerta('Error al registrar la entrada', 'error');
         }
     };
+
+
+    const validarSalida = async (Parametros) => {
+        try {
+            // Verificar si la cantidad de productos a salir excede el stock inicial
+            if (Parametros.cantidad > productos.stockInicial) {
+                verAlerta("No puedes hacer esta salida, valor excedido del inventario", "error");
+            } else {
+                // Calcular el nuevo stock después de la salida
+                const nuevoStock = productos.stockInicial - Parametros.cantidad;
+
+                // Realizar una solicitud PUT para actualizar el stock del producto
+                const response = await fetch(`http://localhost:3001/productos/${productos.producto}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ stockInicial: nuevoStock })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el stock del producto');
+                }
+
+                // Si la solicitud PUT es exitosa, realizar una solicitud POST para registrar la salida
+                const salidaResponse = await fetch('http://localhost:3001/salidas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(Parametros)
+                });
+
+                if (!salidaResponse.ok) {
+                    throw new Error('Error al registrar la salida');
+                }
+
+                // Mostrar una alerta o realizar otras acciones necesarias para indicar que la salida se ha realizado con éxito
+                verAlerta('Salida registrada correctamente', 'success');
+            }
+        } catch (error) {
+            console.error('Error al validar la salida:', error);
+            // Mostrar una alerta de error u otras acciones necesarias
+        }
+    }
     return (
         <div className='container'>
             {
@@ -226,6 +330,17 @@ const StockManagement = () => {
                                             <label htmlFor="stockInicial" className="form-label">Stock</label>
                                             <input type="number" className="form-control" id="stockInicial" onChange={(e) => setStockInicial(e.target.value)} value={stockInicial} required placeholder="Stock Inicial del Producto" />
                                         </div>
+                                        {/*Prueba*/}
+                                        <div className='mb-3'>
+                                            <label htmlFor='categoría' className='form-label'>Ubicaciones del Producto</label>
+                                            <select className='form-select' id='categoría' onChange={(e) => setUbica(e.target.value)} value={ubic} required>
+                                                <option value=''>Seleccionar Ubicaciones</option>
+                                                {Ubicaciones && Array.isArray(Ubicaciones) && Ubicaciones.map((ubicacion, index) => (
+                                                    <option key={index} value={ubicacion._id}>{ubicacion.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        {/*fin de la prueba*/}
 
                                     </div>
                                     <div className='modal-footer'>
@@ -284,7 +399,7 @@ const StockManagement = () => {
                                         <td>{producto.fechaS}</td>
                                         <td>
                                             <button className='btn btn-success' data-bs-toggle='modal' data-bs-target='#exampleModal' onClick={() => openModal(2, producto._id, producto.name, producto.stockInicial)}>Entrada</button>
-                                            <button className='btn btn-danger' onClick={() => registrarSalida(producto._id)} disabled={!!producto.fechaS}>Salida</button>
+                                            <button className='btn btn-danger' onClick={() => registrarSalida(producto._id)} disabled={!producto.fechaS}>Salida</button>
                                             <button className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal' >
                                                 <FontAwesomeIcon icon={faEdit} />
                                             </button>

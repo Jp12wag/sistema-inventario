@@ -1,12 +1,12 @@
 aside {
-    max-width: 20%;
+    max-width: 25%;
     min-height: 490px;
     width: 19%;
     height: 535px;
     float: left;
     align-items: center;
     flex-wrap: wrap;
-    background-color: #487be99e;
+    padding-top: 150px;
 }
 
 aside ul li {
