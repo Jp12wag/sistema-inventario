@@ -10,29 +10,58 @@ import Ubicaciones from './componentes/Ubicaciones'
 import Stock from './componentes/Stock'
 import Aside from './componentes/Aside';
 import Header from './componentes/Header'
+import Footer from './componentes/Footer'
+import Reportes from './componentes/Reportes';
 
 function App() {
+  const token = localStorage.getItem('token');
+  if (!token) {
 
-  
-  return (
-    <div className="App">
-      <Router>
-      <Header id='Header' />
-      <Aside />
-      <div className='contenedor-principal'>
-        <Routes>
-          <Route path='/' element={<VentanaIniciSesion />}></Route>
-          <Route path='/Productos' element={<Productos />}></Route>
-          <Route path='/Categorias' element={<Categorias />}></Route>
-          <Route path='/Registro' element={<Registro />}></Route>
-          <Route path='/Proveedores' element={<Proveedor />}></Route>
-          <Route path='/Ubicaciones' element={<Ubicaciones />}></Route>
-          <Route path='/Stock' element={<Stock />}></Route>
-        </Routes>
-      </div>
-      </Router>
+    return (
+      <div className="App">
+        <Router>
+          <Header id='Header' />
+          <div className='nuevoContenedor'>
+            <Routes>
+              <Route path='/' element={<VentanaIniciSesion />}></Route>
+              <Route path='/Registro' element={<Registro />}></Route>
+            </Routes>
+          </div>
+
+          <Footer id='Footer.js' />
+        </Router>
       </div >
-  );
+    );
+
+
+
+  } else {
+    return (
+      <div className="App">
+        <Router>
+          <Header id='Header' />
+          <Aside id='Aside' />
+
+          <div className='contenedor-principal'>
+            <Routes>
+              <Route path='/' element={<VentanaIniciSesion />}></Route>
+              <Route path='/Productos' element={<Productos />}></Route>
+              <Route path='/Categorias' element={<Categorias />}></Route>
+              <Route path='/Registro' element={<Registro />}></Route>
+              <Route path='/Proveedores' element={<Proveedor />}></Route>
+              <Route path='/Ubicaciones' element={<Ubicaciones />}></Route>
+              <Route path='/Stock' element={<Stock />}></Route>
+              <Route path='/Reportes' element={<Reportes/>}></Route>
+            </Routes>
+          </div>
+
+          <Footer id='Footer.js' />
+        </Router>
+      </div >
+    );
+  }
+
+
 }
 
 export default App;

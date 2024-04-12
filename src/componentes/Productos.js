@@ -175,7 +175,7 @@ const VerProductos = () => {
             setProveedor(proveedor);
             setStockInicial(stockInicial);
             setUbica(ubicacion);
-           
+
         }
 
         window.setTimeout(function () {
@@ -204,7 +204,7 @@ const VerProductos = () => {
             verAlerta('Escribe el stock del producto', 'warning');
         } else {
             if (operacion === 1) {
-                parametros = { name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial, ubicacion: ubic, fechaE: fechaEntrada,fechaUpdate:'' ,fechaS: '', owner: userId };
+                parametros = { name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial, ubicacion: ubic, fechaE: fechaEntrada, fechaUpdate: '', fechaS: '', owner: userId };
                 metodo = 'POST'
 
             } else {
@@ -282,7 +282,7 @@ const VerProductos = () => {
                         {/* Botón para generar PDF */}
                         <PDFDownloadLink document={<PDFDocument data={productos} />} fileName="reporte_productos.pdf">
                             <button>DESCARGA PDF
-                            {({ loading }) => (loading ? 'Cargando...' : 'Descargar PDF')}
+                                {({ loading }) => (loading ? 'Cargando...' : 'Descargar PDF')}
                             </button>
                         </PDFDownloadLink>
 

@@ -13,7 +13,7 @@ function Header() {
             <h1>LogiVault</h1>
 
             <nav>
-                <p id="NombreDeUsuario">@{userName}</p>
+                <p id="NombreDeUsuario">{userName}</p>
             </nav>
             {/* Agrega el resto de los elementos de navegación aquí */}
         </header>

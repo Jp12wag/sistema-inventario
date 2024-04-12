@@ -44,6 +44,7 @@ function VentanaIniciSesion() {
       localStorage.setItem('token', data.token)
       localStorage.setItem('roles', data.user.roles)
       localStorage.setItem('id', data.user._id)
+      localStorage.setItem('userName',data.user.name)
 
       setFormData({
         password: '',
@@ -54,7 +55,7 @@ function VentanaIniciSesion() {
       if (!localStorage.getItem('token') || localStorage.getItem('roles') !== 'Administrador') {
         window.location.href = '/usuarioMenu';
       }else{
-        window.location.href = '/Principal';
+        window.location.href = '/Productos';
       }
 
 
@@ -71,7 +72,7 @@ function VentanaIniciSesion() {
 
       <div className='contenedor-inicio'>
 
-        <div className='imagen-inicio'><img src={imgInicio} alt='imagen de inicio' /></div>
+        <div className='imagen-inicio'><img id='imagenLateral' src={imgInicio} alt='imagen de inicio' /></div>
         <div className='log-info'>
           <img className='img-logo' src={logo} alt='logo app' />
           <label htmlFor='email'>Email
@@ -82,18 +83,13 @@ function VentanaIniciSesion() {
           </label>
           <div className='btn-submit'>
             <button className='btn-btn-submit' type='submit'>Login</button>
-
-
           </div>
           <label className='registrarse'>¿No tienes cuenta?</label>
           <Link className='registro' to="/Registro">Registrate aquí</Link>
         </div>
 
       </div>
-      <div class="contenedor-footer">
-        <footer class="footer">
-          <p class="texto-footer"><i class="fa-regular fa-copyright" />Todos los derechos reservados a los creadores de LogiVault</p>
-        </footer> </div>
+      
     </form>
   )
 }
