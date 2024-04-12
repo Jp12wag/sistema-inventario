@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import '../stylesheet/Aside.css'
 import { Link } from 'react-router-dom'
 
 
 function Aside() {
+    const [login, setLogin] = useState(false);
+
+
+
+    const cerrarSesion = () => {
+        
+        setLogin(false);
+    };
 
     return (
 
         <aside>
             <ul>
-                <Link to="/">
-                    <li><button id="BotonDeContenido2">Inicio</button></li>
-                </Link>
+                <li>
+                    <Link to="/">
+                        <button id="inicio">Inicio</button>
+                    </Link>
+                </li>
                 <li>
                     <Link to="/Productos">
                         <button id="BotonDeContenido1">Gestión de Productos</button>
@@ -37,7 +47,16 @@ function Aside() {
                         <button id="BotonDeContenido1">Gestión de Stock</button>
                     </Link>
                 </li>
-                
+                <li>
+                    <Link to="/Reportes">
+                        <button id="BotonDeContenido1">Gestión de Reportes</button>
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/">
+                        <button id="cerrarSesion" onClick={cerrarSesion}>Cerrar Sesion</button>
+                    </Link>
+                </li>
             </ul>
         </aside>
     );

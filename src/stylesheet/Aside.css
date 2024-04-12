@@ -1,26 +1,62 @@
-aside {
+side {
+    padding-top: 15px;
     max-width: 25%;
-    min-height: 490px;
-    width: 19%;
-    height: 535px;
+    min-height: auto;
+    width: 25%;
+    height: 75%;
     float: left;
-    align-items: center;
-    flex-wrap: wrap;
-    padding-top: 150px;
+
+    /* background-color: red; */
+    /* bottom: 0;
+    left: 0; */
 }
 
 aside ul li {
+    padding: 25px;
     list-style: none;
-    width: 100%;
-    flex-direction:column;
-    font-size:medium;
+    flex-direction: column;
 }
 
-aside ul li button {
-font-size: small;
+aside ul li a button {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: larger;
+    width: 100%;
+    height: auto;
+
+    border-style: double;
+    border-radius: 3px;
     text-align: center;
-    width: 80%;
-    height: 30px;
-    border-style: none;
-    border-radius: 0px;
+    background-color: #487ae9;
+    border-color: #1957dc;
+    color: aliceblue;
+    cursor: pointer;
+}
+
+button {
+    /* border-radius: 100vmax;
+    border: 0;
+    width: 6rem;
+    height: 2.4rem;
+    padding-left: 1.8rem;
+    margin: auto;
+    font-size: 1rem;
+    display: flex;
+    user-select: none; */
+}
+
+button:hover {
+
+    font-weight: bold;
+    background-color: #1957dc;
+    transform: scale(1.2);
+    transition: 0.2s;
+    color: rgb(255, 255, 255);
+    padding-left: 1.6rem;
+
+}
+
+button:active {
+    background-color: #f06c00;
+    transform: scale(0.95) scale(1.1);
+    transition: 0.2s;
 }

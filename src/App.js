@@ -9,29 +9,29 @@ import Proveedor from './componentes/Proveedor'
 import Ubicaciones from './componentes/Ubicaciones'
 import Stock from './componentes/Stock'
 import Aside from './componentes/Aside';
+import Header from './componentes/Header'
 
 function App() {
+
+  
   return (
-    <div id='contendedorGeneral'>
-       <Router>
-      <Aside id='valorAside'/>
-      <div className="App">
-        <div className='contenedor-principal'>
-          <Routes>
-            <Route path='/' element={<VentanaIniciSesion />}></Route>
-            <Route path='/Productos' element={<Productos />}></Route>
-            <Route path='/Categorias' element={<Categorias />}></Route>
-            <Route path='/Registro' element={<Registro />}></Route>
-            <Route path='/Proveedores' element={<Proveedor />}></Route>
-            <Route path='/Ubicaciones' element={<Ubicaciones />}></Route>
-            <Route path='/Stock' element={<Stock/>}></Route>
-          </Routes>
-
-        </div>
+    <div className="App">
+      <Router>
+      <Header id='Header' />
+      <Aside />
+      <div className='contenedor-principal'>
+        <Routes>
+          <Route path='/' element={<VentanaIniciSesion />}></Route>
+          <Route path='/Productos' element={<Productos />}></Route>
+          <Route path='/Categorias' element={<Categorias />}></Route>
+          <Route path='/Registro' element={<Registro />}></Route>
+          <Route path='/Proveedores' element={<Proveedor />}></Route>
+          <Route path='/Ubicaciones' element={<Ubicaciones />}></Route>
+          <Route path='/Stock' element={<Stock />}></Route>
+        </Routes>
       </div>
-
-    </Router>
-    </div>
+      </Router>
+      </div >
   );
 }
 

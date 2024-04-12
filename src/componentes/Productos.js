@@ -7,6 +7,8 @@ import 'bootstrap/dist/js/bootstrap.bundle'; // Importar Bootstrap
 import { verAlerta } from './funciones'
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFDocument from './PDFDocument';
 
 
 
@@ -27,12 +29,14 @@ const VerProductos = () => {
     const [title, setTitle] = useState('');
     const [operacion, setOperacion] = useState(1);
     const [categoriaFiltro, setCategoriaFiltro] = useState('');
-
+    const [ubic, setUbica] = useState('');
+    const [ubicaciones, setUbicaciones] = useState([]);
 
     useEffect(() => {
         getProductos();
         obtenerCategorias();
         obtenerProveedore();
+        obtenerUbicaciones();
     }, []);
 
     const obtenerCategorias = async () => {
@@ -52,6 +56,27 @@ const VerProductos = () => {
             setCate(data); // Actualizar el estado con las categorías obtenidas
         } catch (error) {
             console.error('Error al obtener las categorías:', error);
+        }
+    }
+
+    const obtenerUbicaciones = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/Ubicaciones', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error de la red');
+            }
+            const data = await response.json();
+            setUbicaciones(data);
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
         }
     }
 
@@ -117,7 +142,7 @@ const VerProductos = () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                
+
                 enviarSolicitud('DELETE', { id: id });
                 getProductos();
             } else {
@@ -127,7 +152,7 @@ const VerProductos = () => {
     }
 
 
-    const openModal = (op, id, name, descripcion, categoria, precio, proveedor, stockInicial) => {
+    const openModal = (op, id, name, descripcion, categoria, precio, proveedor, stockInicial, ubicacion) => {
         setId('');
         setName('');
         setDescripcion('');
@@ -135,7 +160,7 @@ const VerProductos = () => {
         setPrecio('');
         setProveedor('');
         setStockInicial('');
-
+        setUbica('');
         setOperacion(op);
         if (op === 1) {
             setTitle('Registrar Producto');
@@ -149,6 +174,8 @@ const VerProductos = () => {
             setPrecio(precio);
             setProveedor(proveedor);
             setStockInicial(stockInicial);
+            setUbica(ubicacion);
+           
         }
 
         window.setTimeout(function () {
@@ -161,6 +188,7 @@ const VerProductos = () => {
     const validar = () => {
         var parametros;
         var metodo;
+        const fechaEntrada = new Date();
         if (name.trim() === '') {
             verAlerta('Escribe el nombre del producto', 'warning');
 
@@ -176,11 +204,11 @@ const VerProductos = () => {
             verAlerta('Escribe el stock del producto', 'warning');
         } else {
             if (operacion === 1) {
-                parametros = { name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial,fechaE:'',fechaS:'',owner: userId };
+                parametros = { name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial, ubicacion: ubic, fechaE: fechaEntrada,fechaUpdate:'' ,fechaS: '', owner: userId };
                 metodo = 'POST'
 
             } else {
-                parametros = { id: id, name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial };
+                parametros = { id: id, name: name, descripcion: descripcion, categoría: categoría, precio: precio, proveedor: proveedor, stockInicial: stockInicial, ubicacion: ubic };
                 metodo = 'PUT'
             }
             enviarSolicitud(metodo, parametros);
@@ -231,12 +259,12 @@ const VerProductos = () => {
             } else {
                 tipo = 'error';
             }
-           
+
 
             if (tipo === 'success') {
                 verAlerta("Registro Exitoso", tipo);
                 document.getElementById('btnCerrar').click();
-               
+
             }
             getProductos();
 
@@ -248,13 +276,19 @@ const VerProductos = () => {
 
     return (
         <div className='container'>
-            <div className='row mt-3'>
-                <div className='col-md-4 offset-md-4'>
+            <div className='row mt-4'>
+                <div className='col-12 '>
                     <div className='d-grid mx-auto'>
+                        {/* Botón para generar PDF */}
+                        <PDFDownloadLink document={<PDFDocument data={productos} />} fileName="reporte_productos.pdf">
+                            <button>DESCARGA PDF
+                            {({ loading }) => (loading ? 'Cargando...' : 'Descargar PDF')}
+                            </button>
+                        </PDFDownloadLink>
+
                         <button className='btn btn-dark' onClick={() => openModal(1)} data-bs-toggle='modal' data-bs-target='#exampleModal'>
                             <FontAwesomeIcon icon={faPlusCircle} /> Añadir
                         </button>
-
                         <input id='search-bar' type='text' placeholder='Buscar por categoría' value={categoriaFiltro} onChange={handleChangeCategoria} />
                     </div>
                 </div>
@@ -296,10 +330,12 @@ const VerProductos = () => {
                                         {/*fin de la prueba*/}
 
                                         <div className="mb-3">
-                                            <label htmlFor="precio" className="form-label">Precio</label>
-                                            <input type="number" className="form-control" id="precio" onChange={(e) => setPrecio(e.target.value)} value={precio} required placeholder="Precio del Producto" />
+                                            <label htmlFor="precio" className="form-label">Valor del Producto</label>
+                                            <input type="number" className="form-control" id="precio" onChange={(e) => setPrecio(e.target.value)} value={precio} required placeholder="Valor del Producto unitario" />
                                         </div>
-                                        <select className='form-select' id='proveedor' onChange={(e) => setProveedor(e.target.value)} value={proveedor} required>
+                                        <div className="mb-3">
+                                            <label htmlFor="proveedor" className="form-label">Proveedor</label>
+                                            <select className='form-select' id='proveedor' onChange={(e) => setProveedor(e.target.value)} value={proveedor} required>
                                                 <option value=''>Seleccionar Proveedor</option>
                                                 {/* Renderizar las opciones de categoría */}
                                                 {prove.map((proveedor, index) => (
@@ -308,6 +344,19 @@ const VerProductos = () => {
                                                 ))}
 
                                             </select>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="ubicacion" className="form-label">Ubicacion</label>
+                                            <select className='form-select' id='ubicacion' onChange={(e) => setUbica(e.target.value)} value={ubic} required>
+                                                <option value=''>Seleccionar Ubicacion</option>
+                                                {/* Renderizar las opciones de categoría */}
+                                                {ubicaciones.map((proveedor, index) => (
+                                                    <option key={index} value={proveedor.id}>{proveedor.name}</option>
+
+                                                ))}
+
+                                            </select>
+                                        </div>
                                         <div className="mb-3">
                                             <label htmlFor="stockInicial" className="form-label">Stock Inicial</label>
                                             <input type="number" className="form-control" id="stockInicial" onChange={(e) => setStockInicial(e.target.value)} value={stockInicial} required placeholder="Stock Inicial del Producto" />
@@ -327,11 +376,12 @@ const VerProductos = () => {
 
                         </div>
                     </div>
-                </div>}
+                </div>
+            }
 
-            <div className='row mt-3'>
-                <div className='col-12 col-lg-8 offset-0 offset-lg-2'>
-                    <div className='table-responsive'>
+            <div className='row mt-4'>
+                <div className='col-12 '>
+                    <div className='table-responsive overflow-auto'>
                         <table className='table table-bordered'>
                             {/* Encabezado de la tabla */}
                             <thead>
@@ -343,51 +393,54 @@ const VerProductos = () => {
                                     <th>PRECIO</th>
                                     <th>PROVEEDOR</th>
                                     <th>CANTIDAD</th>
+                                    <th>UBICACION</th>
                                     <th>ACCIONES</th>
                                 </tr>
                             </thead>
 
-                                {/* Cuerpo de la tabla */}
-                                <tbody>
-                                    {/* Utiliza la función de filtrado si hay una categoría seleccionada, de lo contrario, muestra todos los productos */}
-                                    {categoriaFiltro ? filtrarPorCategoria().map((producto, index) => (
-                                        <tr key={producto._id}>
-                                            <td>{index + 1}</td>
-                                            <td>{producto.name}</td>
-                                            <td>{producto.descripcion}</td>
-                                            <td>{producto.categoría}</td>
-                                            <td>{new Intl.NumberFormat('es-RD').format(producto.precio)}</td>
-                                            <td>{producto.proveedor}</td>
-                                            <td>{producto.stockInicial}</td>
-                                            <td>
-                                                <button onClick={() => openModal(2, producto._id, producto.name, producto.descripcion, producto.categoria, producto.precio, producto.proveedor, producto.stockInicial)} className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal' >
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </button>
-                                                <button className='btn btn-danger' onClick={() => eliminarProductos(producto._id, producto.name)}>
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )) : productos.map((producto, index) => (
-                                        <tr key={producto._id}>
-                                            <td>{index + 1}</td>
-                                            <td>{producto.name}</td>
-                                            <td>{producto.descripcion}</td>
-                                            <td>{producto.categoría}</td>
-                                            <td>{new Intl.NumberFormat('es-RD').format(producto.precio)}</td>
-                                            <td>{producto.proveedor}</td>
-                                            <td>{producto.stockInicial}</td>
-                                            <td>
-                                                <button onClick={() => openModal(2, producto._id, producto.name, producto.descripcion, producto.categoria, producto.precio, producto.proveedor, producto.stockInicial)} className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal' >
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </button>
-                                                <button className='btn btn-danger' onClick={() => eliminarProductos(producto._id, producto.name)}>
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
+                            {/* Cuerpo de la tabla */}
+                            <tbody>
+                                {/* Utiliza la función de filtrado si hay una categoría seleccionada, de lo contrario, muestra todos los productos */}
+                                {categoriaFiltro ? filtrarPorCategoria().map((producto, index) => (
+                                    <tr key={producto._id}>
+                                        <td>{index + 1}</td>
+                                        <td>{producto.name}</td>
+                                        <td>{producto.descripcion}</td>
+                                        <td>{producto.categoría}</td>
+                                        <td>{new Intl.NumberFormat('es-RD').format(producto.precio)}</td>
+                                        <td>{producto.proveedor}</td>
+                                        <td>{producto.stockInicial}</td>
+                                        <td>{producto.ubicacion}</td>
+                                        <td>
+                                            <button onClick={() => openModal(2, producto._id, producto.name, producto.descripcion, producto.categoria, producto.precio, producto.proveedor, producto.stockInicial, producto.ubicacion)} className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal' >
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                            <button className='btn btn-danger' onClick={() => eliminarProductos(producto._id, producto.name)}>
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )) : productos.map((producto, index) => (
+                                    <tr key={producto._id}>
+                                        <td>{index + 1}</td>
+                                        <td>{producto.name}</td>
+                                        <td>{producto.descripcion}</td>
+                                        <td>{producto.categoría}</td>
+                                        <td>{new Intl.NumberFormat('es-RD').format(producto.precio)}</td>
+                                        <td>{producto.proveedor}</td>
+                                        <td>{producto.stockInicial}</td>
+                                        <td>{producto.ubicacion}</td>
+                                        <td>
+                                            <button onClick={() => openModal(2, producto._id, producto.name, producto.descripcion, producto.categoria, producto.precio, producto.proveedor, producto.stockInicial, producto.ubicacion)} className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal' >
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                            <button className='btn btn-danger' onClick={() => eliminarProductos(producto._id, producto.name)}>
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
                 </div>

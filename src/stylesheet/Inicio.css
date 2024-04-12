@@ -53,7 +53,8 @@ input {
 
 
 button {
-    background-color: #487ae9;
+    background-color: rgba(43, 12, 203, 0.308);
+    text-decoration: none;
     border-radius: 100vmax;
     color: aliceblue;
     border: 0;
