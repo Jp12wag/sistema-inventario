@@ -16,4 +16,4 @@ function Reportes(){
     );
 
 }
-export default Reportes();
+export default Reportes;
