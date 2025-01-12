@@ -13,7 +13,6 @@ function Aside() {
         setLogin(false);
         localStorage.clear();
         window.location.href = '/';
-        console.log(localStorage.getItem('token'));
        
     };
 
@@ -52,6 +51,11 @@ function Aside() {
                         <Link to="/Reportes">
                             <button id="BotonDeContenido1">Gestión de Reportes</button>
                         </Link>
+                    </li>
+                    <li>
+                    <Link to="/Usuarios">
+                    <button id="BotonDeContenido1" >Usuarios</button>
+                    </Link>
                     </li>
                     <li>
                     <Link>

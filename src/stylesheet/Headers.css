@@ -34,7 +34,7 @@ nav ul {
     padding: 0;
     margin: 0;
     flex-direction: row;
-    user-select: none;
+    
 }
 
 nav ul li {
