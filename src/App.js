@@ -13,6 +13,7 @@ import Header from './componentes/Header';
 import Footer from './componentes/Footer';
 import Reportes from './componentes/Reportes';
 import Usuarios from './componentes/Usuarios';
+import SalidaHistorial from './componentes/SalidaHistorial';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -37,6 +38,7 @@ function App() {
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Reportes" element={<Reportes />} />
               <Route path="/Usuarios" element={<Usuarios />} />
+              <Route path="/Salida" element={<SalidaHistorial />} />
               <Route path="*" element={<Productos />} /> {/* Ruta por defecto para usuarios autenticados */}
             </>
           )}

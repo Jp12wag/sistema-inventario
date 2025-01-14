@@ -14,6 +14,7 @@ const StockManagement = () => {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [precio, setPrecio] = useState('');
+    const [comentarios, setComentarios] = useState('');
     const [operacion, setOperacion] = useState(2);
     const [cantidad, setCantidad] = useState();
     const [cliente, setCliente] = useState();
@@ -64,13 +65,14 @@ const StockManagement = () => {
 
 
 
-    const openModal = (op, id, name, stockInicial, ubicacion, precio, cliente) => {
+    const openModal = (op, id, name, stockInicial, ubicacion, precio, cliente,comentarios) => {
         setId('');
         setName('');
         setStockInicial('');
         setUbica('');
         setPrecio('');
         setCliente('');
+        setComentarios('');
 
         setOperacion(op);
         if (op === 2) {
@@ -87,6 +89,7 @@ const StockManagement = () => {
             setUbica(ubicacion);
             setPrecio(precio);
             setCliente(cliente);
+            setComentarios(comentarios);
         }
 
         window.setTimeout(function () {
@@ -201,7 +204,7 @@ const StockManagement = () => {
             const canti = cantidad;
 
             const producto = productos.find(producto => producto._id === productoId);
-            validarSalida({ producto: productoId, cantidad: cantidad, ubicación: producto.ubicacion, cliente: cliente, precioDeVenta: producto.precio, fecha: fechaSalida }, producto.stockInicial);
+            validarSalida({ producto: productoId, cantidad: cantidad, ubicación: producto.ubicacion, cliente: cliente,comentarios: comentarios, precioDeVenta: producto.precio, fecha: fechaSalida }, producto.stockInicial);
 
 
         } catch (error) {
@@ -297,6 +300,10 @@ const StockManagement = () => {
                                                     <input type="text" className="form-control" id="cliente" onChange={(e) => setCliente(e.target.value)} value={cliente} required placeholder="Nombre del Cliente" />
                                                 </div>
                                                 <div className="mb-3">
+                                                    <label htmlFor="cliente" className="form-label">comentarios</label>
+                                                    <input type="textarea" className="form-control" id="comentarios" onChange={(e) => setComentarios(e.target.value)} value={comentarios} required placeholder="Comentarios" />
+                                                </div>
+                                                <div className="mb-3">
                                                     <label htmlFor="precio" className="form-label">Valor del producto</label>
                                                     <input type="number" className="form-control" id="precio" disabled onChange={(e) => setPrecio(e.target.value)} value={precio} required placeholder="Precio del Producto" />
                                                 </div>
@@ -321,7 +328,7 @@ const StockManagement = () => {
 
             <div className='row mt-4'>
                 <div className='col-12'>
-                    <div className='table-responsive overflow-auto'>
+                    <div className='table-responsive' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
                         <table className='table table-bordered'>
                             {/* Encabezado de la tabla */}
                             <thead>

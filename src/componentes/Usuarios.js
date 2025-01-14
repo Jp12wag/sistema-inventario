@@ -121,7 +121,7 @@ function Usuarios() {
                 {editingUserId && <button onClick={() => setEditingUserId(null)}>Cancelar</button>}
             </form>
 
-            <ul>
+            <ul className='listaUsuarios'>
                 {usuarios.map((usuario) => (
                     <li key={usuario._id}>
                         {usuario.name} - {usuario.email}

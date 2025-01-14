@@ -234,7 +234,7 @@ const VerCategoria = () => {
 
             <div className='row mt-3'>
                 <div className='col-12 col-lg-8 offset-0 offset-lg-2'>
-                    <div className='table-responsive overflow-auto'>
+                    <div className='table-responsive' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
                         <table className='table table-bordered'>
                             {/* Encabezado de la tabla */}
                             <thead>

@@ -48,6 +48,11 @@ function Aside() {
                         </Link>
                     </li>
                     <li>
+                    <Link to="/Salida">
+                    <button id="BotonDeContenido1" >Salida</button>
+                    </Link>
+                    </li>
+                    <li>
                         <Link to="/Reportes">
                             <button id="BotonDeContenido1">Gestión de Reportes</button>
                         </Link>

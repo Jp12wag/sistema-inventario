@@ -17,6 +17,7 @@ body {
   color: #c2c2c2;
   background: url(https://mecaluxes.cdnwm.com/blog/img/almacen-desordenado.1.2.jpg) no-repeat center center/cover;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  overflow: hidden;
 }
 
 /* code {
