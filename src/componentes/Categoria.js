@@ -19,6 +19,8 @@ const VerCategoria = () => {
     const [title, setTitle] = useState('');
     const [operacion, setOperacion] = useState(1);
     const [categoriaFiltro, setCategoriaFiltro] = useState('');
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const VerCategoria = () => {
 
     async function obtenerCategorias() {
         try {
-            const response = await fetch('http://localhost:3001/categorias', {
+            const response = await fetch(`${apiUrl}categorias`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
